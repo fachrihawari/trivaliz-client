@@ -24,10 +24,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-100`}
       >
-        {children}
+        <div className="max-w-md mx-auto h-screen bg-white">
+          {children}
+        </div>
       </body>
     </html>
   );
