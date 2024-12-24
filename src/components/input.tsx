@@ -1,4 +1,4 @@
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> { }
+type InputProps = React.InputHTMLAttributes<HTMLInputElement>
 
 export default function Input({ className, ...props }: InputProps) {
   return (
