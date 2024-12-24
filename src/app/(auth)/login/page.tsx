@@ -3,7 +3,7 @@
 import Image from "next/image"
 import LoginForm from "./components/form"
 import Separator from "./components/separator"
-import SocialButtons from "./components/social-buttons"
+import SocialButtons from "./components/social_buttons"
 import trivalizLogo from "@/assets/icons/trivaliz.png"
 
 export default function LoginPage() {
@@ -17,7 +17,7 @@ export default function LoginPage() {
         src={trivalizLogo}
         className="mx-auto"
       />
-      <p className="mb-12 text-lg mx-auto">closer to your loved ones</p>
+      <p className="mb-12 text-lg mx-auto text-center">the ultimate trivia showdown</p>
 
       <LoginForm />
       <Separator />
