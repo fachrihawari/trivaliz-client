@@ -1,16 +1,18 @@
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: 'primary' | 'secondary'
+  variant?: 'flat' | 'solid' | 'outlined';
+  fullWidth?: boolean;
 }
 
-export default function Button({ children, className, variant = 'primary', ...props }: ButtonProps) {
+export default function Button({ children, className, variant = 'solid', ...props }: ButtonProps) {
   const variants = {
-    primary: 'bg-primary text-white',
-    secondary: 'bg-white text-black border'
+    flat: 'text-primary',
+    solid: 'bg-primary text-white',
+    outlined: 'bg-white text-black border border-gray-200'
   }
 
   return (
     <button
-      className={`flex flex-row justify-center items-center gap-x-2 w-full font-medium ${variants[variant]} rounded-full h-12 ${className}`}
+      className={`flex flex-row justify-center items-center gap-x-2 font-medium ${variants[variant]} rounded-full h-12 ${className}`}
       {...props}
     >
       {children}

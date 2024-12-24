@@ -40,7 +40,7 @@ export default function LoginForm() {
         placeholder="your password"
       />
 
-      <Button>Login</Button>
+      <Button className="w-full">Login</Button>
     </form>
   )
 }

@@ -7,11 +7,11 @@ export default function SocialButtons() {
 
   return (
     <div className="flex flex-col gap-y-4">
-      <Button variant="secondary">
+      <Button variant="outlined">
         <Image width={24} height={24} src={googleIcon} alt="google sign in" />
         <span>Sign in with Google</span>
       </Button>
-      <Button variant="secondary">
+      <Button variant="outlined">
         <Image width={24} height={24} src={facebookIcon} alt="facebook sign in" />
         <span>Sign in with Facebook</span>
       </Button>
