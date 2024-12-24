@@ -18,7 +18,7 @@ export default function SwiperButtons() {
     return () => {
       swiper.off('activeIndexChange')
     }
-  }, [])
+  }, [swiper])
 
   const goToLogin = async () => {
     await markIntroShown()
