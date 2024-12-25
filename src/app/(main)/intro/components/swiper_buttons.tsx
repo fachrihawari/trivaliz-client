@@ -26,10 +26,10 @@ export default function SwiperButtons() {
   }
 
   return (
-    <div className="z-10 absolute left-0 right-0 bottom-0 flex justify-between space-x-4">
+    <div className="z-10 absolute left-4 right-4 bottom-8 flex justify-between space-x-4">
       <Button className='font-bold' variant='flat' onClick={goToLogin}>Skip</Button>
 
-      <div className='flex flex-row space-x-4'>
+      <div className='flex flex-row space-x-2'>
         {activeIndex > 0 && (
           <Button variant='outlined' className="w-12 h-12 border-primary text-primary" onClick={() => !swiper.slidePrev() && goToLogin()}>
             <FiArrowRight size={24} className='transform rotate-180' />

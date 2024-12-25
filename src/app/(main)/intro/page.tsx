@@ -9,7 +9,7 @@ import data from './data';
 
 export default function IntroPage() {
   return (
-    <div className='p-4 h-dvh'>
+    <div className='h-dvh'>
       <Swiper
         spaceBetween={0} className='h-full'>
         {data.map((slide, index) => (
