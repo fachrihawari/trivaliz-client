@@ -31,7 +31,7 @@ export default function SwiperButtons() {
 
       <div className='flex flex-row space-x-2'>
         {activeIndex > 0 && (
-          <Button variant='outlined' className="w-12 h-12 border-primary text-primary" onClick={() => !swiper.slidePrev() && goToLogin()}>
+          <Button variant='outlined' className="w-12 h-12" onClick={() => !swiper.slidePrev() && goToLogin()}>
             <FiArrowRight size={24} className='transform rotate-180' />
           </Button>
         )}

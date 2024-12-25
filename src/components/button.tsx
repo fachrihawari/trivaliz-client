@@ -6,8 +6,8 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 export default function Button({ children, className, variant = 'solid', ...props }: ButtonProps) {
   const variants = {
     flat: 'text-primary',
-    solid: 'bg-primary text-white',
-    outlined: 'bg-white text-black border border-gray-200'
+    solid: 'bg-primary text-white border border-primary',
+    outlined: 'bg-white text-primary border border-primary'
   }
 
   return (
