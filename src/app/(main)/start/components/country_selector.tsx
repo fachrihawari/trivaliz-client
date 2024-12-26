@@ -3,6 +3,7 @@ import { LuArrowRight } from "react-icons/lu";
 import { motion } from 'motion/react'
 import countries from "@/data/countries.json"
 import { AnimatePresence } from "motion/react";
+import Image from "next/image";
 
 export default function CountrySelector() {
   const [selected, setSelected] = useState('ID')
@@ -50,10 +51,10 @@ type CountryPillProps = {
   onSelect: (code: string) => void
 }
 function CountryPill({ country, selected, onSelect }: CountryPillProps) {
-  let className = selected === country.code ? 'bg-primary text-white' : ''
+  const className = selected === country.code ? 'bg-primary text-white' : ''
   return (
     <motion.div whileHover={{ scale: 1.1 }} layout onClick={() => onSelect(country.code)} className={`border flex justify-center items-center whitespace-nowrap py-2 px-6 rounded-full cursor-pointer ${className}`}>
-      <img src={country.flag} width={40} height={10} className="w-10 h-3 border" alt={country.code + ' flag'} />
+      <Image src={country.flag} width={40} height={10} className="w-10 h-3 border" alt={country.code + ' flag'} />
       <span className="ml-2">{country.name}</span>
     </motion.div>
   )

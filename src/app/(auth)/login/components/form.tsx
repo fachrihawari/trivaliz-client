@@ -1,6 +1,5 @@
 import Button from "@/components/button"
 import Input from "@/components/input"
-import { useRouter } from "next/navigation"
 import { ChangeEventHandler, useState } from "react"
 
 export default function LoginForm() {
@@ -8,7 +7,6 @@ export default function LoginForm() {
     email: "",
     password: ""
   })
-  const router = useRouter()
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     const { name, value } = event.target

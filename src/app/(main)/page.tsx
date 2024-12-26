@@ -4,6 +4,7 @@ import { LuCrown } from "react-icons/lu";
 import Header from "./components/header";
 import Link from "next/link";
 import { GiCheckeredFlag } from "react-icons/gi";
+import Image from "next/image";
 
 const games = [
   {
@@ -42,7 +43,7 @@ const games = [
 
 export default function Home() {
   return (
-    <>
+    <div className="relative h-full">
       <Header />
 
       <Link href='/start' className="border border-primary absolute bottom-4 left-4 right-4 gap-x-2 bg-primary text-lg font-semibold text-white flex items-center justify-center px-8 py-2 rounded-lg">
@@ -54,7 +55,7 @@ export default function Home() {
         <h1 className="text-2xl">Recent games</h1>
         {games.map((game, index) => (
           <div key={index} className="flex items-center mt-4 gap-x-4 p-4 border  rounded-xl">
-            <img src={game.flag} width={40} height={30} alt={`${game.country} flag`} className="rounded-md" />
+            <Image src={game.flag} width={40} height={30} alt={`${game.country} flag`} className="rounded-md" />
             <div className="w-full">
               <div className="flex justify-between items-center">
                 <h2 className="text-xl font-semibold">{game.name}</h2>
@@ -71,6 +72,6 @@ export default function Home() {
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 }
