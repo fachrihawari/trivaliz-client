@@ -8,6 +8,18 @@ const nextConfig: NextConfig = {
         search: '',
       },
     ],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'api.dicebear.com',
+        pathname: '/**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'flagcdn.com',
+        pathname: '/**'
+      }
+    ]
   },
 };
 

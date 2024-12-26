@@ -1,0 +1,102 @@
+[
+  {
+    "flag": "https://flagcdn.com/w40/au.png",
+    "name": "Australia",
+    "code": "AU"
+  },
+  {
+    "flag": "https://flagcdn.com/w40/br.png",
+    "name": "Brazil",
+    "code": "BR"
+  },
+  {
+    "flag": "https://flagcdn.com/w40/ca.png",
+    "name": "Canada",
+    "code": "CA"
+  },
+  {
+    "flag": "https://flagcdn.com/w40/cn.png",
+    "name": "China",
+    "code": "CN"
+  },
+  {
+    "flag": "https://flagcdn.com/w40/fr.png",
+    "name": "France",
+    "code": "FR"
+  },
+  {
+    "flag": "https://flagcdn.com/w40/de.png",
+    "name": "Germany",
+    "code": "DE"
+  },
+  {
+    "flag": "https://flagcdn.com/w40/in.png",
+    "name": "India",
+    "code": "IN"
+  },
+  {
+    "flag": "https://flagcdn.com/w40/id.png",
+    "name": "Indonesia",
+    "code": "ID"
+  },
+  {
+    "flag": "https://flagcdn.com/w40/it.png",
+    "name": "Italy",
+    "code": "IT"
+  },
+  {
+    "flag": "https://flagcdn.com/w40/jp.png",
+    "name": "Japan",
+    "code": "JP"
+  },
+  {
+    "flag": "https://flagcdn.com/w40/my.png",
+    "name": "Malaysia",
+    "code": "MY"
+  },
+  {
+    "flag": "https://flagcdn.com/w40/nl.png",
+    "name": "Netherlands",
+    "code": "NL"
+  },
+  {
+    "flag": "https://flagcdn.com/w40/ph.png",
+    "name": "Philippines",
+    "code": "PH"
+  },
+  {
+    "flag": "https://flagcdn.com/w40/sg.png",
+    "name": "Singapore",
+    "code": "SG"
+  },
+  {
+    "flag": "https://flagcdn.com/w40/kr.png",
+    "name": "South Korea",
+    "code": "KR"
+  },
+  {
+    "flag": "https://flagcdn.com/w40/es.png",
+    "name": "Spain",
+    "code": "ES"
+  },
+  {
+    "flag": "https://flagcdn.com/w40/th.png",
+    "name": "Thailand",
+    "code": "TH"
+  },
+  {
+    "flag": "https://flagcdn.com/w40/gb.png",
+    "name": "United Kingdom",
+    "code": "GB"
+  },
+  {
+    "flag": "https://flagcdn.com/w40/us.png",
+    "name": "United States",
+    "code": "US"
+  },
+  {
+    "flag": "https://flagcdn.com/w40/vn.png",
+    "name": "Vietnam",
+    "code": "VN"
+  }
+]
