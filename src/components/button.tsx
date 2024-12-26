@@ -7,13 +7,13 @@ export default function Button({ children, className, variant = 'solid', ...prop
   const variants = {
     flat: 'text-primary',
     solid: 'bg-primary text-white border border-primary',
-    outlined: 'bg-white text-primary border border-primary'
+    outlined: 'bg-white border border-gray-300'
   }
 
   return (
     <button
-      className={`flex flex-row justify-center items-center gap-x-2 font-medium ${variants[variant]} rounded-full h-12 ${className}`}
       {...props}
+      className={`flex flex-row justify-center items-center gap-x-2 rounded-full h-12 ${variants[variant]} ${className}`}
     >
       {children}
     </button>

@@ -6,12 +6,18 @@ export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
 
   if (accessTokenCookie) {
-    return NextResponse.redirect(new URL('/', request.url));
+    // If the user is logged in, redirect to the home page if they try to access the login or register page
+    if (['/login', '/register'].includes(pathname)) {
+      return NextResponse.redirect(new URL('/', request.url));
+    }
   } else {
+    // If the user is not logged in, redirect to the intro page if they haven't seen it yet
     if (!introShownCookie && pathname !== '/intro') {
       return NextResponse.redirect(new URL('/intro', request.url));
     }
-    if (introShownCookie && pathname !== '/login') {
+    // If the user is not logged in and has seen the intro, redirect to the login page if they try to access any other page
+    // except the login and register pages
+    if (introShownCookie && !['/login', '/register'].includes(pathname)) {
       return NextResponse.redirect(new URL('/login', request.url));
     }
   }

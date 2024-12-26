@@ -3,7 +3,7 @@
 import Image from "next/image"
 import LoginForm from "./components/form"
 import Separator from "./components/separator"
-import SocialButtons from "./components/social_buttons"
+import OtherButtons from "./components/other_buttons"
 import trivalizLogo from "@/assets/icons/trivaliz.png"
 
 export default function LoginPage() {
@@ -21,7 +21,7 @@ export default function LoginPage() {
 
       <LoginForm />
       <Separator />
-      <SocialButtons />
+      <OtherButtons />
     </div>
   )
 
