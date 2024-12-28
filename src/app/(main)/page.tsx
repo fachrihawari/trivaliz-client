@@ -38,20 +38,70 @@ const games = [
     startedAt: "2021-07-01",
     players: 4,
     winner: "Player 1",
+  },
+  {
+    name: "Food in Thailand",
+    country: "TH",
+    flag: "https://flagcdn.com/40x30/th.png",
+    startedAt: "2021-07-01",
+    players: 4,
+    winner: "Player 1",
+  },
+  {
+    name: "Food in Japan",
+    country: "JP",
+    flag: "https://flagcdn.com/40x30/jp.png",
+    startedAt: "2021-07-01",
+    players: 4,
+    winner: "Player 1",
+  },
+  {
+    name: "Food in Korea",
+    country: "KR",
+    flag: "https://flagcdn.com/40x30/kr.png",
+    startedAt: "2021-07-01",
+    players: 4,
+    winner: "Player 1",
+  },
+  {
+    name: "Food in China",
+    country: "CN",
+    flag: "https://flagcdn.com/40x30/cn.png",
+    startedAt: "2021-07-01",
+    players: 4,
+    winner: "Player 1",
+  },
+  {
+    name: "Food in Vietnam",
+    country: "VN",
+    flag: "https://flagcdn.com/40x30/vn.png",
+    startedAt: "2021-07-01",
+    players: 4,
+    winner: "Player 1",
+  },
+  {
+    name: "Food in India",
+    country: "IN",
+    flag: "https://flagcdn.com/40x30/in.png",
+    startedAt: "2021-07-01",
+    players: 4,
+    winner: "Player 1",
   }
 ]
 
 export default function Home() {
   return (
-    <div className="relative h-full">
+    <div className="relative h-full overflow-hidden">
       <Header />
 
-      <Link href='/start' className="border border-primary absolute bottom-4 left-4 right-4 gap-x-2 bg-primary text-lg font-semibold text-white flex items-center justify-center px-8 py-2 rounded-lg">
-        <GiCheckeredFlag size={24} />
-        Start New Game
-      </Link>
+      <div className="bg-white absolute bottom-0 left-0 right-0 border-t border-gray-200 p-4">
+        <Link href='/start' className="border border-primary gap-x-2 bg-primary text-lg font-semibold text-white flex items-center justify-center px-8 py-2 rounded-lg">
+          <GiCheckeredFlag size={24} />
+          Start New Game
+        </Link>
+      </div>
 
-      <div className="px-4 pt-4">
+      <div className="px-4 pt-4 overflow-y-scroll h-full pb-40">
         <h1 className="text-2xl">Recent games</h1>
         {games.map((game, index) => (
           <div key={index} className="flex items-center mt-4 gap-x-4 p-4 border  rounded-xl">
