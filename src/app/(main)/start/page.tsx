@@ -5,7 +5,6 @@ import Header from "./components/header";
 import countries from '@/data/countries.json';
 import { LuUser, LuUsers } from "react-icons/lu";
 import { useState } from "react";
-import { motion } from 'motion/react'
 import Button from "@/components/button";
 import { GiCheckeredFlag } from "react-icons/gi";
 import { SingleValueProps, type OptionProps } from 'react-select'
@@ -97,7 +96,7 @@ export default function StartPage() {
           {modes.map((current) => {
             const className = mode === current.value ? 'border-primary text-primary' : '';
             return (
-              <Button type='button' variant="outlined" onClick={() => setMode(current.value)} key={current.value} className={`cursor-pointer flex gap-x-2 items-center justify-center w-1/2 h-12 border rounded-full ${className}`}>
+              <Button type='button' variant="outlined" onClick={() => setMode(current.value)} key={current.value} className={`cursor-pointer flex gap-x-2 items-center justify-center w-1/2 h-12 border rounded-full hover:scale-105 transition ease-in-out duration-300 ${className}`}>
                 <current.icon />
                 <span>{current.name}</span>
               </Button>
