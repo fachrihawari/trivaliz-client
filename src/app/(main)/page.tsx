@@ -7,7 +7,6 @@ import { useState } from "react";
 import { LuCrown } from "react-icons/lu";
 import { GiCheckeredFlag } from "react-icons/gi";
 import Image from "next/image";
-import { Sheet } from "react-modal-sheet";
 
 export default function Home() {
   const [startOpen, setStartOpen] = useState(false)
