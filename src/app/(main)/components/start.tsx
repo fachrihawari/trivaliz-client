@@ -82,7 +82,9 @@ export default function StartPage({ open, setOpen }: StartPageProps) {
       <Sheet.Backdrop onTap={close} />
       <Sheet.Container style={{
         borderTopLeftRadius: '1.5rem',
-        borderTopRightRadius: '1.5rem'
+        borderTopRightRadius: '1.5rem',
+        maxWidth: '28rem',
+        left: 'calc(50% - 14rem)',
       }}>
         <Sheet.Header />
         <Sheet.Content>

@@ -5,7 +5,7 @@ import { LuSettings, LuBadgeHelp } from "react-icons/lu";
 
 export default function Header() {
   return (
-    <div className="flex h-16 px-4 items-center gap-x-4 text-gray-600 border-b">
+    <div className="flex h-16 px-4 items-center gap-x-2 text-gray-600 border-b">
       <Image alt="profile" src='https://api.dicebear.com/9.x/dylan/png?seed=tedante' width={40} height={40} className="border rounded-full" />
       <div className="flex-1">
         <h1>
@@ -16,13 +16,15 @@ export default function Header() {
         </div>
       </div>
 
-      <Link href='/settings' className='text-3xl'>
-        <LuSettings />
-      </Link>
+      <div className="flex">
+        <Link href='/settings' className='hover:bg-gray-100 p-2 rounded-full'>
+          <LuSettings size={30} />
+        </Link>
 
-      <Link href='/help' className='text-3xl'>
-        <LuBadgeHelp />
-      </Link>
+        <Link href='/help' className='hover:bg-gray-100 p-2 rounded-full'>
+          <LuBadgeHelp size={30} />
+        </Link>
+        </div>
     </div>
   )
 }
