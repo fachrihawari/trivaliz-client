@@ -5,9 +5,9 @@ import { LuUser, LuUsers } from "react-icons/lu";
 import { useState } from "react";
 import Button from "@/components/button";
 import { GiCheckeredFlag } from "react-icons/gi";
-import { SingleValueProps, type OptionProps } from 'react-select'
-import Image from "next/image";
 import Select from 'react-select';
+import type { SingleValue, SingleValueProps, OptionProps } from 'react-select'
+import Image from "next/image";
 import { Sheet } from 'react-modal-sheet';
 
 type CountryOption = {
@@ -16,9 +16,8 @@ type CountryOption = {
   code: string
 }
 
-const CustomOption = (props: OptionProps) => {
-  const { innerProps, isSelected, label } = props
-  const data = props.data as CountryOption
+const CustomOption = (props: OptionProps<CountryOption>) => {
+  const { innerProps, isSelected, label, data } = props
 
   let className = 'flex hover:bg-primary hover:text-white px-4 py-2 items-center gap-x-4'
   if (isSelected) className += ' text-white bg-primary'
@@ -31,7 +30,7 @@ const CustomOption = (props: OptionProps) => {
   )
 }
 
-const CustomSingleValue = (props: SingleValueProps) => {
+const CustomSingleValue = (props: SingleValueProps<CountryOption>) => {
   const { innerProps, children } = props
   const data = props.data as CountryOption
   const className = 'absolute flex px-4 py-2 items-center gap-x-4'
@@ -63,18 +62,24 @@ type StartPageProps = {
 }
 export default function StartPage({ open, setOpen }: StartPageProps) {
   const [mode, setMode] = useState<'MP' | 'SP'>('SP')
+  const [country, setCountry] = useState<SingleValue<CountryOption>>(null)
+
+  const close = () => setOpen(false)
+
+  const isValid = Boolean(country) && Boolean(mode)
 
   return (
 
     <Sheet
       isOpen={open}
-      onClose={() => setOpen(false)}
+      onClose={close}
       snapPoints={[400, 0]}
       onSnap={(snapIndex) => {
-        if (snapIndex === 1) setOpen(false)
+        if (snapIndex === 1) close()
       }}
       initialSnap={0}
     >
+      <Sheet.Backdrop onTap={close} />
       <Sheet.Container style={{
         borderTopLeftRadius: '1.5rem',
         borderTopRightRadius: '1.5rem'
@@ -87,10 +92,11 @@ export default function StartPage({ open, setOpen }: StartPageProps) {
             <Select
               className="mt-2"
               isSearchable
-              onChange={console.log}
+              onChange={(country) => setCountry(country as CountryOption)}
+              value={country}
               name="country"
-              getOptionLabel={(opt) => (opt as CountryOption).name}
-              getOptionValue={(opt) => (opt as CountryOption).code}
+              getOptionLabel={(opt) => opt.name}
+              getOptionValue={(opt) => opt.code}
               options={countries}
               components={{
                 Option: CustomOption,
@@ -119,7 +125,7 @@ export default function StartPage({ open, setOpen }: StartPageProps) {
               })}
             </div>
 
-            <Button className="mt-8">
+            <Button disabled={!isValid} className="mt-8">
               <GiCheckeredFlag />
               Start
             </Button>
