@@ -84,7 +84,12 @@ export default function StartPage({ open, setOpen }: StartPageProps) {
         <Sheet.Header />
         <Sheet.Content>
           <h1 className='text-2xl px-6 text-center'>Start New Game</h1>
-          <form className="px-6 pt-6 flex flex-col">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              window.location.href = `/game/${mode}`
+            }}
+          className="px-6 pt-6 flex flex-col">
             <label className="mb-2 font-medium">Country</label>
             <Select
               className="mt-2"
