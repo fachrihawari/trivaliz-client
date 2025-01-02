@@ -6,7 +6,7 @@ import { LuArrowLeft } from "react-icons/lu";
 
 export default function Help() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-dvh bg-white">
       <div className="h-14 px-4 border-b flex items-center">
         <Link href="/" replace className="p-2 -ml-2 hover:bg-gray-100 rounded-full">
           <LuArrowLeft size={24} />
@@ -14,7 +14,7 @@ export default function Help() {
         <h1 className="ml-2 font-medium">Help</h1>
       </div>
 
-      <div className="py-6 px-4">
+      <div className="py-4 px-4">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">
             Welcome to Trivaliz! 🎉
