@@ -80,12 +80,7 @@ export default function StartPage({ open, setOpen }: StartPageProps) {
       initialSnap={0}
     >
       <Sheet.Backdrop onTap={close} />
-      <Sheet.Container style={{
-        borderTopLeftRadius: '1.5rem',
-        borderTopRightRadius: '1.5rem',
-        maxWidth: '28rem',
-        left: 'calc(50% - 14rem)',
-      }}>
+      <Sheet.Container className='!rounded-tl-3xl !rounded-tr-3xl !max-w-md sm:!left-[calc(50%-14rem)]' >
         <Sheet.Header />
         <Sheet.Content>
           <h1 className='text-2xl px-6 text-center'>Start New Game</h1>
