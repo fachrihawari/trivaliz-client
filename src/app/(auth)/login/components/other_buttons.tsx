@@ -1,3 +1,5 @@
+'use client'
+
 import Button from "@/components/button";
 import Image from "next/image";
 import googleIcon from '@/assets/icons/google.svg';

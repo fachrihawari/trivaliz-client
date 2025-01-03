@@ -1,33 +1,55 @@
 import Button from "@/components/button"
 import Input from "@/components/input"
-import { ChangeEventHandler, useState } from "react"
+import { ErrorResponse } from "@/interfaces/error"
+import { cookies } from "next/headers"
+import { redirect } from "next/navigation"
+
+type LoginResponse = {
+  token: string
+  user: {
+    id: string
+    username: string
+    email: string
+    country: string
+  }
+}
 
 export default function LoginForm() {
-  const [form, setForm] = useState({
-    email: "",
-    password: ""
-  })
+  const login = async (formData: FormData) => {
+    'use server'
+    const body = {
+      email: formData.get("email"),
+      password: formData.get("password")
+    }
 
-  const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-    const { name, value } = event.target
-    setForm(draft => {
-      return {
-        ...draft,
-        [name]: value
-      }
+    const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/auth/login", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
     })
+
+    if (!res.ok) {
+      const data: ErrorResponse = await res.json()
+      return redirect("/login?type=error&message=" + data.message)
+    }
+    const data: LoginResponse = await res.json()
+    const cookieStore = await cookies()
+    cookieStore.set("accessToken", data.token)
+
+    return redirect("/")
   }
 
   return (
-    <form>
+    <form action={login}>
       <label className="font-medium" htmlFor="email">Email</label>
       <Input
         id="email"
         type="email"
         name="email"
-        value={form.email}
-        onChange={handleChange}
         placeholder="e.g lorem@mail.com"
+        defaultValue="user1@yopmail.com"
       />
 
       <label className="font-medium" htmlFor="password">Password</label>
@@ -35,15 +57,11 @@ export default function LoginForm() {
         id="password"
         type="password"
         name="password"
-        value={form.password}
-        onChange={handleChange}
         placeholder="your password"
+        defaultValue="password"
       />
 
-      <Button onClick={() => {
-        document.cookie = `accessToken=${Date.now()}`
-        // router.push('/')
-      }} className="w-full">Login</Button>
+      <Button className="w-full">Login</Button>
     </form>
   )
 }
