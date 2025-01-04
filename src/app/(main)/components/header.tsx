@@ -1,7 +1,8 @@
+import { logout } from "@/actions/auth";
 import Image from "next/image";
 import Link from "next/link";
 import { GiJusticeStar } from "react-icons/gi";
-import { LuSettings, LuBadgeHelp } from "react-icons/lu";
+import { LuSettings, LuBadgeHelp, LuLogOut } from "react-icons/lu";
 
 export default function Header() {
   return (
@@ -24,7 +25,11 @@ export default function Header() {
         <Link href='/help' className='hover:bg-gray-100 p-2 rounded-full'>
           <LuBadgeHelp size={30} />
         </Link>
-        </div>
+
+        <button onClick={logout} className="hover:bg-gray-100 p-2 rounded-full">
+          <LuLogOut size={30} />
+        </button>
+      </div>
     </div>
   )
 }

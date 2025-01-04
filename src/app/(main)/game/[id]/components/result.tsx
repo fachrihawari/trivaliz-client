@@ -13,7 +13,7 @@ export default function Result() {
 
   return (
     <div className="h-full bg-white">
-      <div className="h-14 px-4 border-b flex justify-center items-center">
+      <div className="h-14 px-4 border-b flex items-center">
         <Link href="/" replace className="p-2 -ml-2 hover:bg-gray-100 rounded-full">
           <LuArrowLeft size={24} />
         </Link>

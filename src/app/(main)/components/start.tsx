@@ -9,6 +9,12 @@ import Select from 'react-select';
 import type { SingleValue, SingleValueProps, OptionProps } from 'react-select'
 import Image from "next/image";
 import { Sheet } from 'react-modal-sheet';
+import { startGame } from '@/actions/game';
+import { AiOutlineLoading } from 'react-icons/ai';
+import { answersAtom, currentQuestionIndexAtom, gameAtom, scoreAtom, statusAtom, timerAtom } from '../../../atoms/game';
+import { useAtom } from 'jotai';
+import { useRouter } from 'next/navigation';
+import { RESET } from 'jotai/utils';
 
 type CountryOption = {
   flag: string
@@ -63,10 +69,19 @@ type StartPageProps = {
 export default function StartPage({ open, setOpen }: StartPageProps) {
   const [mode, setMode] = useState<'MP' | 'SP'>('SP')
   const [country, setCountry] = useState<SingleValue<CountryOption>>(null)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const [_game, setGame] = useAtom(gameAtom)
+  const [_timer, setTimer] = useAtom(timerAtom)
+  const [_status, setStatus] = useAtom(statusAtom)
+  const [_currentQuestionIndex, setCurrentQuestionIndex] = useAtom(currentQuestionIndexAtom)
+  const [_answers, setAnswers] = useAtom(answersAtom)
+  const [_score, setScore] = useAtom(scoreAtom)
+
+  const router = useRouter()
 
   const close = () => setOpen(false)
-
-  const isValid = Boolean(country) && Boolean(mode)
+  const isValid = !!country && !!mode
 
   return (
 
@@ -85,11 +100,25 @@ export default function StartPage({ open, setOpen }: StartPageProps) {
         <Sheet.Content>
           <h1 className='text-2xl px-6 text-center'>Start New Game</h1>
           <form
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
               e.preventDefault()
-              window.location.href = `/game/${mode}`
+              if (!isValid) return
+              setIsLoading(true)
+              const result = await startGame(country.code, mode)
+              if (result) {
+                setGame(result)
+                setTimer(RESET)
+                setCurrentQuestionIndex(RESET)
+                setAnswers(RESET)
+                setScore(RESET)
+                // TODO: status must be waiting if multi player
+                setStatus('playing')
+
+                router.push(`/game/${result.id}`)
+              }
+              setIsLoading(false)
             }}
-          className="px-6 pt-6 flex flex-col">
+            className="px-6 pt-6 flex flex-col">
             <label className="mb-2 font-medium">Country</label>
             <Select
               className="mt-2"
@@ -127,8 +156,8 @@ export default function StartPage({ open, setOpen }: StartPageProps) {
               })}
             </div>
 
-            <Button disabled={!isValid} className="mt-8">
-              <GiCheckeredFlag />
+            <Button disabled={!isValid || isLoading} className="mt-8">
+              {isLoading ? <AiOutlineLoading className="animate-spin" /> : <GiCheckeredFlag />}
               Start
             </Button>
           </form>

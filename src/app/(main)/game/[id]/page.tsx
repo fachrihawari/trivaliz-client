@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from "react";
 import Question from "./components/question";
 import Result from "./components/result";
+import { statusAtom } from "@/atoms/game";
+import { useAtom } from "jotai";
 
 export default function GamePage() {
-  const [done] = useState(true)
+  const [status] = useAtom(statusAtom)
 
-  return done ? <Result /> : <Question />
+  return status === 'done' ? <Result /> : <Question />
 }

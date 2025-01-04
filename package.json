@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "PORT=3001 next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "jotai": "^2.11.0",
     "motion": "^11.15.0",
     "next": "15.1.2",
     "react": "^19.0.0",
