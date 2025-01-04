@@ -10,7 +10,7 @@ export default function Slide(props: SlideProps) {
 
   return (
     <div className='flex flex-col h-full items-center pt-4 px-4'>
-      <div className="bg-gradient-to-b from-[#F5F7F4] to-secondary h-3/5 flex justify-center items-center w-full rounded-3xl">
+      <div className="bg-gradient-to-b from-[#F5F7F4] to-secondary h-3/5 flex justify-center items-center w-full rounded-lg">
         <Image
           src={image}
           className='w-72 h-72'

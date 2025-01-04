@@ -28,8 +28,8 @@ export default function Home() {
       <div className="px-4 pt-4 overflow-y-scroll h-full pb-40">
         <h1 className="text-2xl">Recent games</h1>
         {games.map((game, index) => (
-          <div key={index} className="flex items-center mt-4 gap-x-4 p-4 border  rounded-xl">
-            <Image src={game.flag} width={40} height={30} alt={`${game.country} flag`} className="rounded-md" />
+          <div key={index} className="flex items-center mt-4 gap-x-4 p-4 border  rounded-lg">
+            <Image src={game.flag} width={40} height={30} alt={`${game.country} flag`} />
             <div className="w-full">
               <div className="flex justify-between items-center">
                 <h2 className="text-xl font-semibold">{game.name}</h2>

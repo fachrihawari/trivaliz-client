@@ -133,13 +133,8 @@ export default function StartPage({ open, setOpen }: StartPageProps) {
                 Option: CustomOption,
                 SingleValue: CustomSingleValue,
               }}
-              styles={{
-                control: (styles) => ({
-                  ...styles,
-                  borderRadius: 1000,
-                  height: '48px',
-                  padding: '0px 8px'
-                })
+              classNames={{
+                control: () => '!h-12 !px-2 !rounded-lg'
               }}
             />
 
@@ -148,7 +143,7 @@ export default function StartPage({ open, setOpen }: StartPageProps) {
               {modes.map((current) => {
                 const className = mode === current.value ? 'border-primary text-primary' : '';
                 return (
-                  <Button type='button' variant="outlined" onClick={() => setMode(current.value)} key={current.value} className={`cursor-pointer flex gap-x-2 items-center justify-center w-1/2 h-12 border rounded-full hover:scale-105 transition ease-in-out duration-300 ${className}`}>
+                  <Button type='button' variant="outlined" onClick={() => setMode(current.value)} key={current.value} className={`w-1/2 hover:scale-105 transition ease-in-out duration-300 ${className}`}>
                     <current.icon />
                     <span>{current.name}</span>
                   </Button>

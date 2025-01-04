@@ -13,7 +13,7 @@ export default function Button({ children, className, variant = 'solid', ...prop
   return (
     <button
       {...props}
-      className={`flex flex-row justify-center items-center gap-x-2 rounded-full h-12 disabled:bg-gray-200 disabled:border-gray-200 disabled:text-gray-600 ${variants[variant]} ${className}`}
+      className={`flex flex-row justify-center items-center gap-x-2 rounded-lg h-12 disabled:bg-gray-200 disabled:border-gray-200 disabled:text-gray-600 ${variants[variant]} ${className}`}
     >
       {children}
     </button>
