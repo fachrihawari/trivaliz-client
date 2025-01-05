@@ -42,7 +42,7 @@ export default function Lobby() {
       socket.off("playersUpdate")
       socket.off("gameStarted")
     }
-  }, [game, user])
+  }, [game, user, setPlayers, setStatus])
 
   const copyToClipboard = async () => {
     try {
@@ -51,6 +51,7 @@ export default function Lobby() {
       alert("Link copied to clipboard!")
       setTimeout(() => setCopied(false), 2000)
     } catch (err) {
+      console.log(err, "<<err")
       alert("Failed to copy link")
     }
   }
@@ -63,6 +64,7 @@ export default function Lobby() {
         url: shareableUrl
       })
     } catch (err) {
+      console.log(err, "<<err")
       alert("Failed to share")
     }
   }

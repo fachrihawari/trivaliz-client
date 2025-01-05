@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { IoTimeOutline } from "react-icons/io5";
 import { LuArrowLeft } from 'react-icons/lu';
 import { RiMenu4Line } from "react-icons/ri";
-import { answersAtom, currentQuestionIndexAtom, gameAtom, scoreAtom, statusAtom, timerAtom } from '@/atoms/game';
+import { answersAtom, currentQuestionIndexAtom, gameAtom, rankingsAtom, scoreAtom, statusAtom, timerAtom } from '@/atoms/game';
 import { useAtom } from 'jotai';
 import { RESET } from 'jotai/utils';
 import { socket } from '@/lib/socket';
@@ -39,8 +39,10 @@ function useGame() {
 
 function useTimer() {
   const [timer, setTimer] = useAtom(timerAtom)
+  const [game] = useAtom(gameAtom)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useAtom(currentQuestionIndexAtom)
-  const [_, setStatus] = useAtom(statusAtom)
+  const [_status, setStatus] = useAtom(statusAtom)
+  const [_rankings, setRankings] = useAtom(rankingsAtom)
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -60,21 +62,31 @@ function useTimer() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [setTimer]);
 
   useEffect(() => {
     if (timer <= 0) {
       if (currentQuestionIndex === 9) {
-        setCurrentQuestionIndex(RESET)
-        setTimer(RESET)
-        // TODO: RESET EVERYTHING
-        setStatus('done')
+        socket.emit('endGame', { gameId: game?.id })
       } else {
         setCurrentQuestionIndex((prevIndex) => prevIndex + 1)
-        setTimer(RESET)
       }
+      setTimer(RESET)
     }
-  }, [timer, currentQuestionIndex])
+  }, [game, timer, currentQuestionIndex, setTimer, setCurrentQuestionIndex])
+
+
+
+  useEffect(() => {
+    socket.on('gameEnded', (data) => {
+      setRankings(data.rankings)
+      setStatus('done')
+    })
+
+    return () => {
+      socket.off('gameEnded')
+    }
+  }, [setRankings, setStatus])
 
   const formattedTime = useMemo(() => formatTime(timer), [timer])
   return formattedTime
@@ -108,8 +120,6 @@ function AnswerOptions() {
   const [availableAnswers, setAvailableAnswers] = useState<string[]>(currentQuestion.answers.map(answer => answer.text))
   const selectedAnswer = useMemo(() => answers[currentQuestionIndex], [answers, currentQuestionIndex])
 
-  console.log(availableAnswers, "<<availableAnswers")
-
   useEffect(() => {
     socket.on('answerResult', (data: {
       playerId: string,
@@ -132,7 +142,7 @@ function AnswerOptions() {
     return () => {
       socket.off('answerResult')
     }
-  }, [currentQuestion, user])
+  }, [currentQuestion, user, setScore, setAvailableAnswers])
 
   return (
     <div className="grid grid-cols-2 gap-4 mb-20">

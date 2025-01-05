@@ -1,3 +1,5 @@
+import { IUser } from "./user"
+
 export interface IGame {
   id: string
   status: string
@@ -14,4 +16,10 @@ export interface IQuestion {
 
 export interface IAnswer {
   text: string
+}
+
+export interface IRanking {
+  playerId: string
+  score: number
+  player: IUser
 }

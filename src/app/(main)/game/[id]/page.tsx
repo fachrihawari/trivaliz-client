@@ -26,7 +26,7 @@ export default function GamePage() {
         alert(err.message)
       })
     }
-  }, [game, id])
+  }, [game, id, setStatus, setGame])
 
   return (
     <Suspense
