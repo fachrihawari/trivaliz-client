@@ -1,12 +1,14 @@
 'use client'
 
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { IoTimeOutline } from "react-icons/io5";
 import { LuArrowLeft } from 'react-icons/lu';
 import { RiMenu4Line } from "react-icons/ri";
-import { answersAtom, currentQuestionIndexAtom, gameAtom, statusAtom, timerAtom } from '@/atoms/game';
+import { answersAtom, currentQuestionIndexAtom, gameAtom, scoreAtom, statusAtom, timerAtom } from '@/atoms/game';
 import { useAtom } from 'jotai';
 import { RESET } from 'jotai/utils';
+import { socket } from '@/lib/socket';
+import { userAtom } from '@/atoms/user';
 
 const colors = [
   'from-blue-500 to-blue-600',
@@ -33,11 +35,6 @@ function useGame() {
     currentQuestionIndex,
     setCurrentQuestionIndex
   }
-}
-
-function useAnswers() {
-  const [answers, setAnswers] = useAtom(answersAtom)
-  return { answers, setAnswers }
 }
 
 function useTimer() {
@@ -99,45 +96,72 @@ export default function Question() {
 
       {/* Answer Options */}
       <p className="text-gray-600 text-lg mb-4">Choose your answer</p>
-      <AnswerOptions  />
+      <AnswerOptions key={currentQuestionIndex} />
     </div>
   );
 }
 function AnswerOptions() {
-  const { currentQuestion, currentQuestionIndex } = useGame()
-  const { answers, setAnswers } = useAnswers()
+  const { currentQuestion, currentQuestionIndex, game } = useGame()
+  const [answers, setAnswers] = useAtom(answersAtom)
+  const [_score, setScore] = useAtom(scoreAtom)
+  const [user] = useAtom(userAtom)
+  const [availableAnswers, setAvailableAnswers] = useState<string[]>(currentQuestion.answers.map(answer => answer.text))
   const selectedAnswer = useMemo(() => answers[currentQuestionIndex], [answers, currentQuestionIndex])
 
+  console.log(availableAnswers, "<<availableAnswers")
+
   useEffect(() => {
-  }, [])
+    socket.on('answerResult', (data: {
+      playerId: string,
+      question: string,
+      answer: string,
+      points: number
+    }) => {
+      console.log(data, "<<data")
+      if (currentQuestion.question === data.question) {
+        setAvailableAnswers(prev => {
+          return prev.filter(answer => answer !== data.answer)
+        })
+
+        if (data.playerId === user?.id) {
+          setScore(prev => prev + data.points)
+        }
+      }
+    })
+
+    return () => {
+      socket.off('answerResult')
+    }
+  }, [currentQuestion, user])
 
   return (
     <div className="grid grid-cols-2 gap-4 mb-20">
       {currentQuestion.answers.map((answer, index) => {
         const color = colors[index]
+        const selectedClassName = selectedAnswer === answer.text ? 'font-semibold disabled:opacity-100' : ''
+        const shouldDisable = Boolean(selectedAnswer) || !availableAnswers.includes(answer.text)
         return (
-          (
-            <button
-              key={answer.text}
-              onClick={() => {
+          <button
+            key={answer.text}
+            disabled={shouldDisable}
+            onClick={() => {
+              setAnswers((prevAnswers) => {
+                const newAnswers = [...prevAnswers]
+                newAnswers[currentQuestionIndex] = answer.text
+                return newAnswers
+              })
 
-                setAnswers((prevAnswers) => {
-                  const newAnswers = [...prevAnswers]
-                  newAnswers[currentQuestionIndex] = answer.text
-                  return newAnswers
-                })
+              socket.emit('submitAnswer', {
+                gameId: game?.id,
+                question: currentQuestion.question,
+                answer: answer.text
+              })
 
-              }}
-              className={`text-white hover:opacity-90 bg-gradient-to-r ${color} py-6 rounded-2xl text-center transition-all duration-200 text-lg relative
-                ${selectedAnswer ? selectedAnswer === answer.text
-                  ? 'font-semibold'
-                  : `opacity-25`
-                  : ''}
-                `}
-            >
-              {answer.text}
-            </button>
-          )
+            }}
+            className={`text-white hover:opacity-90 bg-gradient-to-r ${color} py-6 rounded-2xl text-center transition-all duration-200 text-lg relative disabled:opacity-25 ${selectedClassName} `}
+          >
+            {answer.text}
+          </button>
         )
       })}
     </div>
