@@ -2,6 +2,8 @@ export interface IGame {
   id: string
   status: string
   country: string
+  hostId: string
+  mode: 'SP' | 'MP'
   questions: IQuestion[]
 }
 

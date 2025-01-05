@@ -111,9 +111,7 @@ export default function StartPage({ open, setOpen }: StartPageProps) {
                 setCurrentQuestionIndex(RESET)
                 setAnswers(RESET)
                 setScore(RESET)
-                // TODO: status must be waiting if multi player
-                setStatus('playing')
-
+                setStatus(mode === 'SP' ? 'playing' : 'waiting')
                 router.push(`/game/${result.id}`)
               }
               setIsLoading(false)

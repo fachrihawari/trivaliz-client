@@ -3,7 +3,6 @@
 import { IErrorResponse } from "@/interfaces/error"
 import { IGame } from "@/interfaces/game"
 import { cookies } from "next/headers"
-import { redirect } from "next/navigation"
 
 export async function startGame(country: string, mode: string) {
   const cookieStore = await cookies()
@@ -12,7 +11,7 @@ export async function startGame(country: string, mode: string) {
   if (!accessToken) {
     // TODO: show alert
     console.error("You are not logged in!");
-    return
+    throw new Error("You are not logged in!")
   }
 
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/games/start`, {
@@ -28,7 +27,36 @@ export async function startGame(country: string, mode: string) {
     // TODO: show alert
     const data: IErrorResponse = await response.json()
     console.error(data, "<<< error data");
-    return
+    throw new Error(data.message)
+  }
+
+  const data: IGame = await response.json()
+  return data
+}
+
+export async function getGame(id: string) {
+  const cookieStore = await cookies()
+  const accessToken = cookieStore.get("accessToken")?.value
+
+  if (!accessToken) {
+    // TODO: show alert
+    console.error("You are not logged in!");
+    throw new Error("You are not logged in!")
+  }
+
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/games/${id}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json'
+    }
+  })
+
+  if (!response.ok) {
+    // TODO: show alert
+    const data: IErrorResponse = await response.json()
+    console.error(data, "<<< error data");
+    throw new Error(data.message)
   }
 
   const data: IGame = await response.json()

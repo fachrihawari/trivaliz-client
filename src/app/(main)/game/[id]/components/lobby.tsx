@@ -3,14 +3,46 @@
 import Link from "next/link"
 import { LuArrowLeft } from "react-icons/lu"
 import { useParams } from "next/navigation"
-import { useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { FiCopy, FiShare2 } from "react-icons/fi"
 import { GiCheckeredFlag } from "react-icons/gi"
+import { socket } from "@/lib/socket"
+import { gameAtom, playersAtom, statusAtom } from "@/atoms/game"
+import { userAtom } from "@/atoms/user"
+import { useAtom } from "jotai"
+import { IUser } from "@/interfaces/user"
 
 export default function Lobby() {
   const { id } = useParams()
   const [copied, setCopied] = useState(false)
   const shareableUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/game/${id}`
+  const [game] = useAtom(gameAtom)
+  const [user] = useAtom(userAtom)
+  const [players, setPlayers] = useAtom(playersAtom)
+  const [_status, setStatus] = useAtom(statusAtom)
+  const isHost = game?.hostId === user?.id
+
+  useEffect(() => {
+    if (game && user) {
+      socket.emit("joinRoom", {
+        gameId: game.id,
+        playerId: user.id
+      })
+    }
+
+    socket.on("playersUpdate", ({ players }: { players: IUser[] }) => {
+      setPlayers(players)
+    })
+
+    socket.on("gameStarted", () => {
+      setStatus('playing')
+    })
+
+    return () => {
+      socket.off("playersUpdate")
+      socket.off("gameStarted")
+    }
+  }, [game, user])
 
   const copyToClipboard = async () => {
     try {
@@ -34,6 +66,13 @@ export default function Lobby() {
       alert("Failed to share")
     }
   }
+
+  const startGame = () => {
+    if (game && game.hostId === user?.id) {
+      socket.emit("startGame", { gameId: game.id })
+    }
+  }
+
 
   return (
     <div className="min-h-full bg-white">
@@ -82,51 +121,63 @@ export default function Lobby() {
 
           <div className="bg-white p-6 rounded-xl shadow-sm border">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold">Players (3/4)</h3>
+              <h3 className="text-lg font-semibold">Players (2/4)</h3>
               <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm">Lobby Open</span>
             </div>
 
             <div className="space-y-3">
-              <div className="flex items-center gap-4 p-3 bg-primary bg-opacity-10 rounded-lg border border-primary">
-                <div className="w-10 h-10 bg-primary bg-opacity-20 rounded-full flex items-center justify-center">
-                  <span className="text-primary font-medium">You</span>
-                </div>
-                <div className="flex-1">
-                  <span className="font-medium">You (Host)</span>
-                  <div className="text-primary font-medium text-sm">Game Master</div>
-                </div>
-              </div>
+              <Suspense fallback={<div>Loading...</div>}>
+                {players.map(player => (
+                  <Player key={player.id} player={player} />
+                ))}
+              </Suspense>
 
-              <div className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-purple-200 hover:bg-purple-50 transition">
-                <div className="w-10 h-10 bg-purple-200 rounded-full flex items-center justify-center">
-                  <span className="text-purple-700 font-medium">JS</span>
-                </div>
-                <div className="flex-1">
-                  <span className="font-medium">John Smith</span>
-                  <div className="text-gray-500 text-sm">Ready</div>
-                </div>
-              </div>
 
-              <div className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-green-200 hover:bg-green-50 transition">
-                <div className="w-10 h-10 bg-green-200 rounded-full flex items-center justify-center">
-                  <span className="text-green-700 font-medium">AJ</span>
-                </div>
-                <div className="flex-1">
-                  <span className="font-medium">Alice Johnson</span>
-                  <div className="text-gray-500 text-sm">Ready</div>
-                </div>
-              </div>
+              {isHost && (
+                <button
 
-            <button
-              className="w-full mt-6 px-6 py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
-            >
-              <GiCheckeredFlag />
-              Start Game
-            </button>
+                  onClick={startGame}
+                  className="w-full mt-6 px-6 py-3 bg-primary text-white rounded-lg font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
+                >
+                  <GiCheckeredFlag />
+                  Start Game
+                </button>
+              )}
             </div>
           </div>
         </div>
       </div>
     </div >
+  )
+}
+
+
+function Player({ player }: { player: IUser }) {
+  const [game] = useAtom(gameAtom)
+  const [user] = useAtom(userAtom)
+
+  const isHost = game?.hostId === player.id
+  const isYou = user?.id === player.id
+  const name = isYou ? 'You' : player.username
+
+  console.log(player, "player");
+
+  const bgColor = isYou ? 'bg-primary border-primary' : 'bg-gray-200'
+  const avatarColor = isYou ? 'bg-primary bg-opacity-20' : 'bg-gray-200'
+  const textColor = isYou ? 'text-primary' : 'text-gray-500'
+
+
+  return (
+    <div className={`flex items-center gap-4 p-3 ${bgColor} bg-opacity-10 rounded-lg border`}>
+      <div className={`w-10 h-10 ${avatarColor} rounded-full flex items-center justify-center`}>
+        <span className={`${textColor} font-medium`}>{name.substring(0, 2).toUpperCase()}</span>
+      </div>
+      <div className="flex-1">
+        <span className="font-medium">{name} {isHost && '(Host)'}</span>
+        <div className={`${textColor} font-medium text-sm`}>
+          {isHost ? 'Game Master' : 'Player'}
+        </div>
+      </div>
+    </div>
   )
 }

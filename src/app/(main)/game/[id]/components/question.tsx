@@ -23,7 +23,6 @@ const colors = [
 
 function useGame() {
   const [game] = useAtom(gameAtom)
-  console.log(game, "<<<<< why game")
   const [currentQuestionIndex, setCurrentQuestionIndex] = useAtom(currentQuestionIndexAtom)
   const questions = useMemo(() => game?.questions || [], [game])
   const currentQuestion = useMemo(() => questions[currentQuestionIndex], [questions, currentQuestionIndex])
@@ -108,7 +107,10 @@ function AnswerOptions() {
   const { currentQuestion, currentQuestionIndex } = useGame()
   const { answers, setAnswers } = useAnswers()
   const selectedAnswer = useMemo(() => answers[currentQuestionIndex], [answers, currentQuestionIndex])
-  console.log(currentQuestion, "<<<<< why")
+
+  useEffect(() => {
+  }, [])
+
   return (
     <div className="grid grid-cols-2 gap-4 mb-20">
       {currentQuestion.answers.map((answer, index) => {
