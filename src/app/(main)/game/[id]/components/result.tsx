@@ -5,13 +5,14 @@ import { LuArrowLeft } from "react-icons/lu"
 import { useAtom } from "jotai"
 import { rankingsAtom } from "@/atoms/game"
 import { IRanking } from "@/interfaces/game"
+import Button from "@/components/button"
 
 export default function Result() {
   const [rankings] = useAtom(rankingsAtom)
   const topThree = rankings.slice(0, 3)
 
   return (
-    <div className="h-full bg-white">
+    <div className="h-full relative bg-white">
       <div className="h-14 px-4 border-b flex items-center">
         <Link href="/" replace className="p-2 -ml-2 hover:bg-gray-100 rounded-full">
           <LuArrowLeft size={24} />
@@ -76,6 +77,13 @@ export default function Result() {
       {/* Player List */}
       <div className="w-full space-y-4 px-4">
         {rankings.map((ranking, index) => <Ranking key={ranking.playerId} ranking={ranking} position={index + 1} />)}
+      </div>
+
+      {/* Call to Action Buttons */}
+      <div className="bg-white absolute bottom-0 left-0 right-0 border-t border-gray-200 p-4">
+        <Button as={Link} className="w-full mb-2" href="/?start=true">
+          Start New Game
+        </Button>
       </div>
     </div>
   )

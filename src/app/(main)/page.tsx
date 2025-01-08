@@ -7,9 +7,12 @@ import { useState } from "react";
 import { LuCrown } from "react-icons/lu";
 import { GiCheckeredFlag } from "react-icons/gi";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 
 export default function Home() {
-  const [startOpen, setStartOpen] = useState(false)
+  const searchParams = useSearchParams()
+  const start = Boolean(searchParams.get('start'))
+  const [startOpen, setStartOpen] = useState(start)
 
   return (
     <div className="relative h-full overflow-hidden">

@@ -163,6 +163,7 @@ function AnswerOptions() {
 
               socket.emit('submitAnswer', {
                 gameId: game?.id,
+                playerId: user?.id,
                 question: currentQuestion.question,
                 answer: answer.text
               })

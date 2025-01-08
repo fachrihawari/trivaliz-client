@@ -11,10 +11,12 @@ import Image from "next/image";
 import { Sheet } from 'react-modal-sheet';
 import { startGame } from '@/actions/game';
 import { AiOutlineLoading } from 'react-icons/ai';
-import { answersAtom, currentQuestionIndexAtom, gameAtom, scoreAtom, statusAtom, timerAtom } from '../../../atoms/game';
+import { answersAtom, currentQuestionIndexAtom, gameAtom, playersAtom, rankingsAtom, scoreAtom, statusAtom, timerAtom } from '@/atoms/game';
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/navigation';
 import { RESET } from 'jotai/utils';
+import { socket } from '@/lib/socket';
+import { userAtom } from '@/atoms/user';
 
 type CountryOption = {
   flag: string
@@ -77,6 +79,9 @@ export default function StartPage({ open, setOpen }: StartPageProps) {
   const [_currentQuestionIndex, setCurrentQuestionIndex] = useAtom(currentQuestionIndexAtom)
   const [_answers, setAnswers] = useAtom(answersAtom)
   const [_score, setScore] = useAtom(scoreAtom)
+  const [_players, setPlayers] = useAtom(playersAtom)
+  const [_rankings, setRankings] = useAtom(rankingsAtom)
+  const [user] = useAtom(userAtom)
 
   const router = useRouter()
 
@@ -108,10 +113,20 @@ export default function StartPage({ open, setOpen }: StartPageProps) {
               if (result) {
                 setGame(result)
                 setTimer(RESET)
-                setCurrentQuestionIndex(RESET)
-                setAnswers(RESET)
                 setScore(RESET)
                 setStatus(mode === 'SP' ? 'playing' : 'waiting')
+                setCurrentQuestionIndex(RESET)
+                setAnswers(RESET)
+                setPlayers(RESET)
+                setRankings(RESET)
+
+                if (mode === 'SP') {
+                  socket.emit("joinRoom", {
+                    gameId: result.id,
+                    playerId: user?.id
+                  })
+                }
+
                 router.push(`/game/${result.id}`)
               }
               setIsLoading(false)
