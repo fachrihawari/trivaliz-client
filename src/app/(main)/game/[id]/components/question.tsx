@@ -2,13 +2,14 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import { IoTimeOutline } from "react-icons/io5";
-import { LuArrowLeft } from 'react-icons/lu';
+import { LuArrowLeft, LuCircleCheck } from 'react-icons/lu';
 import { RiMenu4Line } from "react-icons/ri";
-import { answersAtom, currentQuestionIndexAtom, gameAtom, rankingsAtom, scoreAtom, statusAtom, timerAtom } from '@/atoms/game';
+import { answersAtom, currentQuestionIndexAtom, gameAtom, pickedAnswersAtom, rankingsAtom, scoreAtom, statusAtom, timerAtom } from '@/atoms/game';
 import { useAtom } from 'jotai';
 import { RESET } from 'jotai/utils';
 import { socket } from '@/lib/socket';
 import { userAtom } from '@/atoms/user';
+import { BiUserCircle } from 'react-icons/bi';
 
 const colors = [
   'from-blue-500 to-blue-600',
@@ -117,7 +118,7 @@ function AnswerOptions() {
   const [answers, setAnswers] = useAtom(answersAtom)
   const [_score, setScore] = useAtom(scoreAtom)
   const [user] = useAtom(userAtom)
-  const [availableAnswers, setAvailableAnswers] = useState<string[]>(currentQuestion.answers.map(answer => answer.text))
+  const [pickedAnswers, setPickedAnswers] = useAtom(pickedAnswersAtom)
   const selectedAnswer = useMemo(() => answers[currentQuestionIndex], [answers, currentQuestionIndex])
 
   useEffect(() => {
@@ -129,8 +130,10 @@ function AnswerOptions() {
     }) => {
       console.log(data, "<<data")
       if (currentQuestion.question === data.question) {
-        setAvailableAnswers(prev => {
-          return prev.filter(answer => answer !== data.answer)
+        console.log("data.answer", data.answer);
+
+        setPickedAnswers(prev => {
+          return [...prev, data.answer]
         })
 
         if (data.playerId === user?.id) {
@@ -142,14 +145,29 @@ function AnswerOptions() {
     return () => {
       socket.off('answerResult')
     }
-  }, [currentQuestion, user, setScore, setAvailableAnswers])
+  }, [currentQuestion, user, setScore, setPickedAnswers])
+
+
+  console.log(pickedAnswers, "<<pickedAnswers")
 
   return (
     <div className="grid grid-cols-2 gap-4 mb-20">
       {currentQuestion.answers.map((answer, index) => {
         const color = colors[index]
-        const selectedClassName = selectedAnswer === answer.text ? 'font-semibold disabled:opacity-100' : ''
-        const shouldDisable = Boolean(selectedAnswer) || !availableAnswers.includes(answer.text)
+        const isMyAnswer = selectedAnswer === answer.text
+        const isSelectedByOthers = pickedAnswers.includes(answer.text) && !isMyAnswer
+        const shouldDisable = Boolean(selectedAnswer) || isSelectedByOthers
+        const disabledClassNames = []
+
+        if (isSelectedByOthers) {
+          disabledClassNames.push('disabled:opacity-25')
+        }
+
+        if (Boolean(selectedAnswer)) {
+          disabledClassNames.push('disabled:cursor-not-allowed')
+        }
+
+
         return (
           <button
             key={answer.text}
@@ -169,9 +187,12 @@ function AnswerOptions() {
               })
 
             }}
-            className={`text-white hover:opacity-90 bg-gradient-to-r ${color} py-6 rounded-2xl text-center transition-all duration-200 text-lg relative disabled:opacity-25 ${selectedClassName} `}
+            className={`text-white hover:opacity-90 bg-gradient-to-r ${color} py-6 rounded-2xl text-center transition-all duration-200 text-lg relative ${disabledClassNames.join(' ')}`}
           >
             {answer.text}
+
+            {isMyAnswer && <LuCircleCheck className="absolute top-2 right-2 text-white" />}
+            {isSelectedByOthers && <BiUserCircle className="absolute top-2 right-2 text-white" />}
           </button>
         )
       })}

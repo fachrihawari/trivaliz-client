@@ -6,6 +6,8 @@ import { useParams } from "next/navigation";
 import { gameAtom, statusAtom } from "@/atoms/game";
 import { getGame } from "@/actions/game";
 import dynamic from "next/dynamic";
+import { socket } from "@/lib/socket";
+import { userAtom } from "@/atoms/user";
 
 const Lobby = dynamic(() => import("./components/lobby"))
 const Question = dynamic(() => import("./components/question"))
@@ -16,9 +18,10 @@ export default function GamePage() {
   const { id } = useParams<{ id: string }>()
   const [status, setStatus] = useAtom(statusAtom)
   const [game, setGame] = useAtom(gameAtom)
+  const [user] = useAtom(userAtom)
 
   useEffect(() => {
-    if (!game) {
+    if (!game && user) {
       getGame(id).then((data) => {
         setStatus(data.mode === 'SP' ? 'playing' : 'waiting')
         setGame(data)
@@ -26,7 +29,16 @@ export default function GamePage() {
         alert(err.message)
       })
     }
-  }, [game, id, setStatus, setGame])
+  }, [game, id, setStatus, setGame, user])
+
+  useEffect(() => {
+    if (game && user) {
+      socket.emit("joinRoom", {
+        gameId: game.id,
+        playerId: user.id
+      })
+    }
+  }, [game, user])
 
   return (
     <Suspense
