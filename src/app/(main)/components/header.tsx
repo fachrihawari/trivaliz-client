@@ -1,13 +1,20 @@
 import { logout } from "@/actions/auth";
+import { getProfile } from "@/actions/user";
 import { userAtom } from "@/atoms/user";
 import { useAtom } from "jotai";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect } from "react";
 import { GiJusticeStar } from "react-icons/gi";
 import { LuSettings, LuBadgeHelp, LuLogOut } from "react-icons/lu";
 
 export default function Header() {
-  const [user] = useAtom(userAtom)
+  const [user, setUser] = useAtom(userAtom)
+
+  useEffect(() => {
+    getProfile().then(setUser)
+  }, [setUser])
+
   return (
     <div className="flex h-16 px-4 items-center gap-x-2 text-gray-600 border-b">
       <Image alt="profile" src={user?.picture ?? 'https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=' + user?.email} width={40} height={40} className="border rounded-lg" />
