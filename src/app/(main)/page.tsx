@@ -31,23 +31,35 @@ export default function Home() {
       <div className="px-4 pt-4 overflow-y-scroll h-full pb-40">
         <h1 className="text-2xl">Recent games</h1>
         {games.map((game, index) => (
-          <div key={index} className="flex items-center mt-4 gap-x-4 p-4 border  rounded-lg">
-            <Image src={game.flag} width={40} height={30} alt={`${game.country} flag`} />
-            <div className="w-full">
-              <div className="flex justify-between items-center">
-                <h2 className="text-xl font-semibold">{game.name}</h2>
-                <p className="text-sm text-gray-500">{new Date(game.startedAt).toLocaleDateString()}</p>
-              </div>
-              <div className="flex justify-between mt-1">
-                <p className="text-sm">{game.players} players</p>
-                <div className="flex items-center gap-x-2 text-emerald-600">
-                  <LuCrown />
-                  <p className="text-sm font-medium">{game.winner} won</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <Game key={index} game={game} />
         ))}
+      </div>
+    </div>
+  );
+}
+
+type GameProps = {
+  game: typeof games[0]
+}
+function Game({ game }: GameProps) {
+  return (
+    <div className="flex items-center mt-4 gap-x-4 p-4 border  rounded-lg">
+      <Image src={game.flag} width={40} height={30} alt={`${game.country} flag`} />
+      <div className="w-full">
+        <div className="flex justify-between items-center">
+          <h2 className="text-xl font-semibold">{game.name}</h2>
+          <p className="text-sm text-gray-500">{new Intl.DateTimeFormat('en-US', {
+            dateStyle: 'medium',
+            timeStyle: 'short',
+          }).format(new Date(game.startedAt))}</p>
+        </div>
+        <div className="flex justify-between mt-1">
+          <p className="text-sm">{game.players} players</p>
+          <div className="flex items-center gap-x-2 text-emerald-600">
+            <LuCrown />
+            <p className="text-sm font-medium">{game.winner} won</p>
+          </div>
+        </div>
       </div>
     </div>
   );

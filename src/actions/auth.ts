@@ -38,3 +38,27 @@ export async function login(form: LoginForm) {
   cookieStore.set("accessToken", data.token)
   return data.user
 }
+
+type GoogleLoginForm = {
+  type: 'auth-code' | 'credential'
+  value: string
+}
+export async function googleLogin(form: GoogleLoginForm) {
+  const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/auth/login/google", {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(form)
+  })
+
+  if (!res.ok) {
+    const data: IErrorResponse = await res.json()
+    throw new Error(data.message)
+  }
+
+  const data: LoginResponse = await res.json()
+  const cookieStore = await cookies()
+  cookieStore.set("accessToken", data.token)
+  return data.user
+}
