@@ -12,7 +12,7 @@ import { googleLogin } from "@/actions/auth";
 import { userAtom } from "@/atoms/user";
 
 export default function OtherButtons() {
-  const [_user, setUser] = useAtom(userAtom)
+  const [, setUser] = useAtom(userAtom)
   const router = useRouter()
   const login = useGoogleLogin({
     flow: 'auth-code',

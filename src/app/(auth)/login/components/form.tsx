@@ -13,7 +13,7 @@ export default function LoginForm() {
     email: "user1@yopmail.com",
     password: "password"
   })
-  const [_user, setUser] = useAtom(userAtom)
+  const [, setUser] = useAtom(userAtom)
   const router = useRouter()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

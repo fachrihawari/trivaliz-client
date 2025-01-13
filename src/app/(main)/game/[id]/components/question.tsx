@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { IoTimeOutline } from "react-icons/io5";
 import { LuArrowLeft, LuCircleCheck } from 'react-icons/lu';
 import { RiMenu4Line } from "react-icons/ri";
@@ -42,8 +42,8 @@ function useTimer() {
   const [timer, setTimer] = useAtom(timerAtom)
   const [game] = useAtom(gameAtom)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useAtom(currentQuestionIndexAtom)
-  const [_status, setStatus] = useAtom(statusAtom)
-  const [_rankings, setRankings] = useAtom(rankingsAtom)
+  const [, setStatus] = useAtom(statusAtom)
+  const [, setRankings] = useAtom(rankingsAtom)
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -116,7 +116,7 @@ export default function Question() {
 function AnswerOptions() {
   const { currentQuestion, currentQuestionIndex, game } = useGame()
   const [answers, setAnswers] = useAtom(answersAtom)
-  const [_score, setScore] = useAtom(scoreAtom)
+  const [, setScore] = useAtom(scoreAtom)
   const [user] = useAtom(userAtom)
   const [pickedAnswers, setPickedAnswers] = useAtom(pickedAnswersAtom)
   const selectedAnswer = useMemo(() => answers[currentQuestionIndex], [answers, currentQuestionIndex])

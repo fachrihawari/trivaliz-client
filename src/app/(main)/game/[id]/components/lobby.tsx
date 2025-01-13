@@ -19,7 +19,7 @@ export default function Lobby() {
   const [game] = useAtom(gameAtom)
   const [user] = useAtom(userAtom)
   const [players, setPlayers] = useAtom(playersAtom)
-  const [_status, setStatus] = useAtom(statusAtom)
+  const [, setStatus] = useAtom(statusAtom)
   const isHost = game?.hostId === user?.id
 
   useEffect(() => {

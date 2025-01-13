@@ -24,7 +24,7 @@ export default function Form() {
     flag: 'https://flagcdn.com/w40/id.png',
     name: 'Indonesia'
   })
-  const [_user, setUser] = useAtom(userAtom)
+  const [, setUser] = useAtom(userAtom)
   const router = useRouter()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
