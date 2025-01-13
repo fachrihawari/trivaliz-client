@@ -39,6 +39,30 @@ export async function login(form: LoginForm) {
   return data.user
 }
 
+type RegisterForm = {
+  email: string
+  password: string
+  username: string
+  country: string
+}
+export async function register(form: RegisterForm) {
+  const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/auth/register", {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(form)
+  })
+
+  if (!res.ok) {
+    const data: IErrorResponse = await res.json()
+    throw new Error(data.message)
+  }
+
+  const user = await login({ email: form.email, password: form.password })
+  return user
+}
+
 type GoogleLoginForm = {
   type: 'auth-code' | 'credential'
   value: string

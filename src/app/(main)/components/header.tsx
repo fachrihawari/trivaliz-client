@@ -17,7 +17,7 @@ export default function Header() {
 
   return (
     <div className="flex h-16 px-4 items-center gap-x-2 text-gray-600 border-b">
-      <Image alt="profile" src={user?.picture ?? 'https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=' + user?.email} width={40} height={40} className="border rounded-lg" />
+      <Image alt="profile" src={user?.picture ?? 'https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=empty'} width={40} height={40} className="border rounded-lg" />
       <div className="flex-1">
         <h1>
           Hi, <span className="font-bold">{user?.username}</span>
