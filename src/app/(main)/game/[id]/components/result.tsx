@@ -26,7 +26,7 @@ export default function Result() {
         {topThree[1] && (
           <div className="flex flex-col items-center animate-bounce-slow">
             <div className="w-16 h-16 rounded-full overflow-hidden mb-2 border-4 border-blue-400 shadow-lg">
-              <Image src={'https://via.placeholder.com/150'} alt="avatar user" className="w-full h-full object-cover" />
+              <Image src={topThree[1].player.picture} width={64} height={64} alt="avatar user" className="w-full h-full object-cover" />
             </div>
             <p className="font-bold text-blue-600">{topThree[1].player.username}</p>
             <p className="text-blue-500 font-medium">
@@ -43,7 +43,7 @@ export default function Result() {
         {topThree[0] && (
           <div className="flex flex-col items-center -mt-8 animate-bounce-slow">
             <div className="w-20 h-20 rounded-full overflow-hidden mb-2 border-4 border-yellow-400 shadow-lg">
-              <Image src={'https://via.placeholder.com/150'} alt="avatar user" className="w-full h-full object-cover" />
+              <Image src={topThree[0].player.picture} width={80} height={80} alt="avatar user" className="w-full h-full object-cover" />
             </div>
             <p className="font-bold text-yellow-600">{topThree[0].player.username}</p>
             <p className="text-yellow-500 font-medium">
@@ -60,7 +60,7 @@ export default function Result() {
         {topThree[2] && (
           <div className="flex flex-col items-center animate-bounce-slow">
             <div className="w-16 h-16 rounded-full overflow-hidden mb-2 border-4 border-purple-400 shadow-lg">
-              <Image src={'https://via.placeholder.com/150'} alt="avatar user" className="w-full h-full object-cover" />
+              <Image src={topThree[2].player.picture} width={64} height={64} alt="avatar user" className="w-full h-full object-cover" />
             </div>
             <p className="font-bold text-purple-600">{topThree[2].player.username}</p>
             <p className="text-purple-500 font-medium">
@@ -99,7 +99,7 @@ function Ranking({ ranking, position }: { ranking: IRanking, position: number })
       <div className="flex items-center gap-3">
         <div className="relative">
           <div className="w-12 h-12 rounded-full overflow-hidden">
-            <Image src='https://via.placeholder.com/150' alt="avatar user" className="w-full h-full object-cover" />
+            <Image src={ranking.player.picture} alt="avatar user" width={48} height={48} className="w-full h-full object-cover" />
           </div>
           <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-sm">
             {position}

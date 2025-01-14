@@ -25,13 +25,13 @@ export default function OtherButtons() {
 
   return (
     <div className="flex flex-col gap-y-4">
-      <Button as={Link} href="/register" variant="outlined">
-        <IoMail size={24} />
-        <span>Sign up with Email</span>
-      </Button>
       <Button onClick={() => login()} variant="outlined">
         <Image width={24} height={24} src={googleIcon} alt="google sign in" />
         <span>Sign in with Google</span>
+      </Button>
+      <Button as={Link} href="/register" variant="outlined">
+        <IoMail size={24} />
+        <span>Sign up with Email</span>
       </Button>
     </div>
   )

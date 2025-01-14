@@ -8,9 +8,12 @@ import { useAtom } from "jotai"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
-import { OptionProps, SingleValueProps } from "react-select"
+import type { OptionProps, SingleValueProps } from "react-select"
 import countries from '@/data/countries.json';
-import Select from 'react-select'
+import dynamic from "next/dynamic"
+
+// Fix hydration mismatch error
+const Select = dynamic(() => import('react-select'), { ssr: false }) as typeof import('react-select').default
 
 
 export default function Form() {

@@ -64,20 +64,20 @@ export default function Help() {
               </h2>
               <div className="grid grid-cols-2 gap-2">
                 <div className="bg-gray-50 p-3 rounded-lg text-center">
-                  <span className="text-2xl mb-1 block">👆</span>
-                  Tap to Select
+                  <span className="text-2xl mb-1 block">🎯</span>
+                  Choose Answer
                 </div>
                 <div className="bg-gray-50 p-3 rounded-lg text-center">
-                  <span className="text-2xl mb-1 block">⚡</span>
-                  Quick Buzzer
+                  <span className="text-2xl mb-1 block">⏱️</span>
+                  Beat the Clock
                 </div>
                 <div className="bg-gray-50 p-3 rounded-lg text-center">
-                  <span className="text-2xl mb-1 block">💭</span>
-                  Chat & Play
+                  <span className="text-2xl mb-1 block">🎪</span>
+                  Join Games
                 </div>
                 <div className="bg-gray-50 p-3 rounded-lg text-center">
-                  <span className="text-2xl mb-1 block">📊</span>
-                  See Scores
+                  <span className="text-2xl mb-1 block">🏆</span>
+                  Track Progress
                 </div>
               </div>
             </div>

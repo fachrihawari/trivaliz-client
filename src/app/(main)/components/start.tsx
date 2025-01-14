@@ -5,7 +5,6 @@ import { LuUser, LuUsers } from "react-icons/lu";
 import { useState } from "react";
 import Button from "@/components/button";
 import { GiCheckeredFlag } from "react-icons/gi";
-import Select from 'react-select';
 import type { SingleValue, SingleValueProps, OptionProps } from 'react-select'
 import Image from "next/image";
 import { Sheet } from 'react-modal-sheet';
@@ -17,6 +16,10 @@ import { useRouter } from 'next/navigation';
 import { RESET } from 'jotai/utils';
 import { socket } from '@/lib/socket';
 import { userAtom } from '@/atoms/user';
+import dynamic from "next/dynamic"
+
+// Fix hydration mismatch error
+const Select = dynamic(() => import('react-select'), { ssr: false }) as typeof import('react-select').default
 
 type CountryOption = {
   flag: string
@@ -109,7 +112,7 @@ export default function StartPage({ open, setOpen }: StartPageProps) {
               e.preventDefault()
               if (!isValid) return
               setIsLoading(true)
-              const result = await startGame(country.code, mode)
+              const result = await startGame(country.name, mode)
               if (result) {
                 setGame(result)
                 setTimer(RESET)

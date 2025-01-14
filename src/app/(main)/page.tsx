@@ -3,22 +3,39 @@
 import Button from "@/components/button";
 import Header from "./components/header";
 import Start from './components/start'
-import { useState } from "react";
-import { LuCrown } from "react-icons/lu";
+import { useEffect, useState } from "react";
+import { LuCrown, LuUser, LuUsers } from "react-icons/lu";
 import { GiCheckeredFlag } from "react-icons/gi";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-
+import { getGamesHistory } from "@/actions/game";
+import { IGame } from "@/interfaces/game";
+import countries from "@/data/countries.json";
 export default function Home() {
   const searchParams = useSearchParams()
   const start = Boolean(searchParams.get('start'))
   const [startOpen, setStartOpen] = useState(start)
+  const [loading, setLoading] = useState(false)
+  const [games, setGames] = useState<IGame[]>([])
+
+  useEffect(() => {
+    setLoading(true)
+    getGamesHistory()
+      .then((games) => {
+        setGames(games)
+        setLoading(false)
+      })
+      .catch((error) => {
+        console.error(error)
+        setLoading(false)
+      })
+  }, [])
 
   return (
     <div className="relative h-full overflow-hidden">
       <Header />
 
-      <div className="bg-white absolute bottom-0 left-0 right-0 border-t border-gray-200 p-4">
+      <div className="z-50 bg-white absolute bottom-0 left-0 right-0 border-t border-gray-200 p-4">
         <Button className="w-full" onClick={() => setStartOpen(true)}>
           <GiCheckeredFlag size={24} />
           Start New Game
@@ -28,123 +45,85 @@ export default function Home() {
       <Start open={startOpen} setOpen={setStartOpen} />
 
 
-      <div className="px-4 pt-4 overflow-y-scroll h-full pb-40">
-        <h1 className="text-2xl">Recent games</h1>
-        {games.map((game, index) => (
-          <Game key={index} game={game} />
-        ))}
+      <div className="px-4 overflow-y-scroll h-full pb-40">
+
+        {loading && [...(new Array(10))].map((_, index) => (
+          <div key={index} className="flex items-center mt-4 gap-x-4 p-4 border rounded-lg animate-pulse">
+            <div className="w-10 h-8 bg-slate-200 rounded"></div>
+            <div className="w-full">
+              <div className="flex justify-between items-center">
+                <div className="h-6 bg-slate-200 rounded w-24"></div>
+                <div className="h-4 bg-slate-200 rounded w-32"></div>
+              </div>
+              <div className="flex justify-between mt-1">
+                <div className="h-4 bg-slate-200 rounded w-20"></div>
+                <div className="flex items-center gap-x-2">
+                  <div className="h-4 bg-slate-200 rounded w-24"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))
+        }
+
+        {games.length > 0 && (
+          <>
+            <h1 className="text-2xl mt-4">Recent games</h1>
+            {games.map((game, index) => (
+              <Game key={index} game={game} />
+            ))}
+          </>
+        )}
+
+        {games.length === 0 && !loading && (
+          <div className="flex flex-col h-full items-center justify-center text-gray-500">
+            <GiCheckeredFlag size={64} className="mb-4 text-gray-400" />
+            <p className="text-xl font-medium">No Game History</p>
+            <p className="text-sm mt-2">Click the button below to start your first game!</p>
+          </div>
+        )}
+
       </div>
     </div>
   );
 }
 
 type GameProps = {
-  game: typeof games[0]
+  game: IGame
 }
 function Game({ game }: GameProps) {
+  const country = countries.find(c => c.name === game.country)
+  if (!country) return null
+
   return (
-    <div className="flex items-center mt-4 gap-x-4 p-4 border  rounded-lg">
-      <Image src={game.flag} width={40} height={30} alt={`${game.country} flag`} />
+    <div className="flex items-center mt-4 gap-x-4 p-4 border rounded-lg hover:bg-gray-50 transition-colors">
+      <Image
+        src={`https://flagcdn.com/40x30/${country.code.toLowerCase()}.png`}
+        width={40}
+        height={30}
+        alt={`${game.country} flag`}
+        className="rounded-sm"
+      />
       <div className="w-full">
         <div className="flex justify-between items-center">
-          <h2 className="text-xl font-semibold">{game.name}</h2>
+          <h2 className="text-xl font-semibold tracking-tight">{game.country}</h2>
           <p className="text-sm text-gray-500">{new Intl.DateTimeFormat('en-US', {
             dateStyle: 'medium',
             timeStyle: 'short',
-          }).format(new Date(game.startedAt))}</p>
+          }).format(new Date(game.createdAt))}</p>
         </div>
         <div className="flex justify-between mt-1">
-          <p className="text-sm">{game.players} players</p>
+          <p className="text-sm text-gray-600 flex items-center flex-row">
+            {game.mode === 'SP' ? <LuUser className="mr-1" /> : <LuUsers className="mr-1" />} {game.mode === 'SP' ? 'Single Player' : (
+              `${Object.keys(game.players).length} players`
+            )}
+          </p>
           <div className="flex items-center gap-x-2 text-emerald-600">
-            <LuCrown />
-            <p className="text-sm font-medium">{game.winner} won</p>
+            <LuCrown className="w-4 h-4" />
+            <p className="text-sm font-medium">??? won</p>
           </div>
         </div>
       </div>
     </div>
   );
 }
-
-
-const games = [
-  {
-    name: "Food in USA",
-    country: "USA",
-    flag: "https://flagcdn.com/40x30/us.png",
-    startedAt: "2021-07-01",
-    players: 4,
-    winner: "Player 1",
-  },
-  {
-    name: "Food in Indonesia",
-    country: "ID",
-    flag: "https://flagcdn.com/40x30/id.png",
-    startedAt: "2021-07-01",
-    players: 4,
-    winner: "Player 1",
-  },
-  {
-    name: "Food in Malaysia",
-    country: "MY",
-    flag: "https://flagcdn.com/40x30/my.png",
-    startedAt: "2021-07-01",
-    players: 4,
-    winner: "Player 1",
-  },
-  {
-    name: "Food in Singapore",
-    country: "SG",
-    flag: "https://flagcdn.com/40x30/sg.png",
-    startedAt: "2021-07-01",
-    players: 4,
-    winner: "Player 1",
-  },
-  {
-    name: "Food in Thailand",
-    country: "TH",
-    flag: "https://flagcdn.com/40x30/th.png",
-    startedAt: "2021-07-01",
-    players: 4,
-    winner: "Player 1",
-  },
-  {
-    name: "Food in Japan",
-    country: "JP",
-    flag: "https://flagcdn.com/40x30/jp.png",
-    startedAt: "2021-07-01",
-    players: 4,
-    winner: "Player 1",
-  },
-  {
-    name: "Food in Korea",
-    country: "KR",
-    flag: "https://flagcdn.com/40x30/kr.png",
-    startedAt: "2021-07-01",
-    players: 4,
-    winner: "Player 1",
-  },
-  {
-    name: "Food in China",
-    country: "CN",
-    flag: "https://flagcdn.com/40x30/cn.png",
-    startedAt: "2021-07-01",
-    players: 4,
-    winner: "Player 1",
-  },
-  {
-    name: "Food in Vietnam",
-    country: "VN",
-    flag: "https://flagcdn.com/40x30/vn.png",
-    startedAt: "2021-07-01",
-    players: 4,
-    winner: "Player 1",
-  },
-  {
-    name: "Food in India",
-    country: "IN",
-    flag: "https://flagcdn.com/40x30/in.png",
-    startedAt: "2021-07-01",
-    players: 4,
-    winner: "Player 1",
-  }
-]

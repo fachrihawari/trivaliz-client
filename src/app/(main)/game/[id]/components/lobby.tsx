@@ -123,7 +123,7 @@ export default function Lobby() {
 
           <div className="bg-white p-6 rounded-xl shadow-sm border">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold">Players (2/4)</h3>
+              <h3 className="text-lg font-semibold">Players ({players.length}/4)</h3>
               <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm">Lobby Open</span>
             </div>
 

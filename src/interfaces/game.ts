@@ -7,6 +7,8 @@ export interface IGame {
   hostId: string
   mode: 'SP' | 'MP'
   questions: IQuestion[]
+  createdAt: string
+  players: Record<string, number>
 }
 
 export interface IQuestion {
