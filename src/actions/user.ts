@@ -33,3 +33,22 @@ export async function getProfile() {
   const data: IUser = await response.json()
   return data
 }
+
+export async function updateProfile(formData: FormData) {
+  const cookieStore = await cookies()
+  const accessToken = cookieStore.get("accessToken")?.value
+
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${accessToken}`
+    },
+    body: formData
+  })
+
+  if (!response.ok) {
+    const data: IErrorResponse = await response.json()
+    console.error(data, "<<< error data");
+    throw new Error(data.message)
+  }
+}

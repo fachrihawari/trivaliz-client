@@ -12,6 +12,7 @@ import { OptionProps } from "react-select"
 import { SingleValueProps } from "react-select"
 import countries from '@/data/countries.json';
 import Button from "@/components/button"
+import { getProfile, updateProfile } from "@/actions/user"
 
 // Fix hydration mismatch error
 const Select = dynamic(() => import('react-select'), { ssr: false }) as typeof import('react-select').default
@@ -49,31 +50,45 @@ const CustomSingleValue = (props: SingleValueProps<CountryOption>) => {
   )
 }
 export default function ProfilePage() {
-  const [user] = useAtom(userAtom)
-  const [username, setUsername] = useState(user?.username || '')
-  const [picture, setPicture] = useState(user?.picture || '')
+  const [user, setUser] = useAtom(userAtom)
+  const [username, setUsername] = useState('')
+  const [picturePreview, setPicturePreview] = useState('')
   const [country, setCountry] = useState<CountryOption | null>(null)
+  const [picture, setPicture] = useState<File | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     setUsername(user?.username || '')
-    setPicture(user?.picture || '')
+    setPicturePreview(user?.picture || '')
 
     const country = countries.find(c => c.name === user?.country)
     setCountry(country || null)
   }, [user])
 
+  useEffect(() => {
+    getProfile().then(setUser)
+  }, [setUser])
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    // TODO: Implement profile update API call
+
+    const formData = new FormData()
+    formData.append('username', username)
+    if (country) formData.append('country', country.name)
+    if (picture) formData.append('photo', picture)
+
+    await updateProfile(formData)
+
+    alert('Profile updated successfully')
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
+      setPicture(file)
       const reader = new FileReader()
       reader.onloadend = () => {
-        setPicture(reader.result as string)
+        setPicturePreview(reader.result as string)
       }
       reader.readAsDataURL(file)
     }
@@ -94,7 +109,7 @@ export default function ProfilePage() {
           <div className="relative group">
             <div className="relative">
               <Image
-                src={picture || 'https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=empty'}
+                src={picturePreview || 'https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=empty'}
                 alt="Profile"
                 width={160}
                 height={160}
