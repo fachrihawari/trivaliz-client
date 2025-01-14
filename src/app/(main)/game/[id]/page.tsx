@@ -3,7 +3,7 @@
 import { useAtom } from "jotai";
 import { Suspense, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { gameAtom, statusAtom } from "@/atoms/game";
+import { gameAtom, rankingsAtom, statusAtom } from "@/atoms/game";
 import { getGame } from "@/actions/game";
 import dynamic from "next/dynamic";
 import { socket } from "@/lib/socket";
@@ -18,12 +18,18 @@ export default function GamePage() {
   const { id } = useParams<{ id: string }>()
   const [status, setStatus] = useAtom(statusAtom)
   const [game, setGame] = useAtom(gameAtom)
+  const [, setRankings] = useAtom(rankingsAtom)
   const [user] = useAtom(userAtom)
 
   useEffect(() => {
     if (!game && user) {
       getGame(id).then((data) => {
-        setStatus(data.mode === 'SP' ? 'playing' : 'waiting')
+        if (data.status === 'ended') {
+          setStatus('done')
+          setRankings(data.rankings)
+        } else {
+          setStatus(data.mode === 'SP' ? 'playing' : 'waiting')
+        }
         setGame(data)
       }).catch(err => {
         alert(err.message)

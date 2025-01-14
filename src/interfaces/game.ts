@@ -9,6 +9,7 @@ export interface IGame {
   questions: IQuestion[]
   createdAt: string
   players: Record<string, number>
+  rankings: IRanking[]
 }
 
 export interface IQuestion {

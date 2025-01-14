@@ -11,6 +11,7 @@ import { useSearchParams } from "next/navigation";
 import { getGamesHistory } from "@/actions/game";
 import { IGame } from "@/interfaces/game";
 import countries from "@/data/countries.json";
+import Link from "next/link";
 export default function Home() {
   const searchParams = useSearchParams()
   const start = Boolean(searchParams.get('start'))
@@ -96,34 +97,36 @@ function Game({ game }: GameProps) {
   if (!country) return null
 
   return (
-    <div className="flex items-center mt-4 gap-x-4 p-4 border rounded-lg hover:bg-gray-50 transition-colors">
-      <Image
-        src={`https://flagcdn.com/40x30/${country.code.toLowerCase()}.png`}
-        width={40}
-        height={30}
-        alt={`${game.country} flag`}
-        className="rounded-sm"
-      />
-      <div className="w-full">
-        <div className="flex justify-between items-center">
-          <h2 className="text-xl font-semibold tracking-tight">{game.country}</h2>
-          <p className="text-sm text-gray-500">{new Intl.DateTimeFormat('en-US', {
-            dateStyle: 'medium',
-            timeStyle: 'short',
-          }).format(new Date(game.createdAt))}</p>
-        </div>
-        <div className="flex justify-between mt-1">
-          <p className="text-sm text-gray-600 flex items-center flex-row">
-            {game.mode === 'SP' ? <LuUser className="mr-1" /> : <LuUsers className="mr-1" />} {game.mode === 'SP' ? 'Single Player' : (
-              `${Object.keys(game.players).length} players`
-            )}
-          </p>
-          <div className="flex items-center gap-x-2 text-emerald-600">
-            <LuCrown className="w-4 h-4" />
-            <p className="text-sm font-medium">??? won</p>
+    <Link href={`/game/${game.id}`}>
+      <div className="flex items-center mt-4 gap-x-4 p-4 border rounded-lg hover:bg-gray-50 transition-colors">
+        <Image
+          src={`https://flagcdn.com/40x30/${country.code.toLowerCase()}.png`}
+          width={40}
+          height={30}
+          alt={`${game.country} flag`}
+          className="rounded-sm"
+        />
+        <div className="w-full">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-semibold tracking-tight">{game.country}</h2>
+            <p className="text-sm text-gray-500">{new Intl.DateTimeFormat('en-US', {
+              dateStyle: 'medium',
+              timeStyle: 'short',
+            }).format(new Date(game.createdAt))}</p>
+          </div>
+          <div className="flex justify-between mt-1">
+            <p className="text-sm text-gray-600 flex items-center flex-row">
+              {game.mode === 'SP' ? <LuUser className="mr-1" /> : <LuUsers className="mr-1" />} {game.mode === 'SP' ? 'Single Player' : (
+                `${Object.keys(game.players).length} players`
+              )}
+            </p>
+            <div className="flex items-center gap-x-2 text-emerald-600">
+              <LuCrown className="w-4 h-4" />
+              <p className="text-sm font-medium">??? won</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
