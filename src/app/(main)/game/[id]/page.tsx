@@ -1,7 +1,7 @@
 'use client'
 
 import { useAtom } from "jotai";
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { gameAtom, rankingsAtom, statusAtom } from "@/atoms/game";
 import { getGame } from "@/actions/game";
@@ -12,17 +12,18 @@ import { userAtom } from "@/atoms/user";
 const Lobby = dynamic(() => import("./components/lobby"))
 const Question = dynamic(() => import("./components/question"))
 const Result = dynamic(() => import("./components/result"))
-const loading = <div className="min-h-full flex justify-center items-center">Loading...</div>
+const loadingComponent = <div className="min-h-full flex justify-center items-center">Loading...</div>
 
 export default function GamePage() {
   const { id } = useParams<{ id: string }>()
   const [status, setStatus] = useAtom(statusAtom)
   const [game, setGame] = useAtom(gameAtom)
-  const [, setRankings] = useAtom(rankingsAtom)
   const [user] = useAtom(userAtom)
+  const [loading, setLoading] = useState(true)
+  const [, setRankings] = useAtom(rankingsAtom)
 
   useEffect(() => {
-    if (!game && user) {
+    if (user) {
       getGame(id).then((data) => {
         if (data.status === 'ended') {
           setStatus('done')
@@ -33,12 +34,14 @@ export default function GamePage() {
         setGame(data)
       }).catch(err => {
         alert(err.message)
+      }).finally(() => {
+        setLoading(false)
       })
     }
-  }, [game, id, setStatus, setGame, user])
+  }, [id, setStatus, setGame, setRankings, user])
 
   useEffect(() => {
-    if (game && user) {
+    if (game && user && game.status !== 'ended') {
       socket.emit("joinRoom", {
         gameId: game.id,
         playerId: user.id
@@ -46,10 +49,12 @@ export default function GamePage() {
     }
   }, [game, user])
 
+  if (loading) {
+    return loadingComponent
+  }
+
   return (
-    <Suspense
-      fallback={loading}
-    >
+    <Suspense fallback={loading}>
       {status === 'waiting' && <Lobby />}
       {status === 'playing' && <Question />}
       {status === 'done' && <Result />}
