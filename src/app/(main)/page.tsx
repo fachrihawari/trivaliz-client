@@ -121,8 +121,9 @@ function Game({ game }: GameProps) {
               )}
             </p>
             <div className="flex items-center gap-x-2 text-emerald-600">
-              <LuCrown className="w-4 h-4" />
-              <p className="text-sm font-medium">??? won</p>
+              {/* TODO: Enable this once we get winner user */}
+              {/* <LuCrown className="w-4 h-4" />
+              <p className="text-sm font-medium">??? won</p> */}
             </div>
           </div>
         </div>
